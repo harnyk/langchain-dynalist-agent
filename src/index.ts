@@ -7,7 +7,7 @@ import { ChatOpenAI } from '@langchain/openai';
 import { fail } from 'node:assert';
 import { z } from 'zod';
 
-import { RedisSaver } from '@langchain/langgraph-checkpoint-redis';
+import { ShallowRedisSaver } from '@langchain/langgraph-checkpoint-redis/shallow';
 import { createClient } from 'redis';
 
 config();
@@ -51,7 +51,7 @@ async function main() {
     try {
         await redis.connect();
 
-        const checkpointer = await RedisSaver.fromUrl(
+        const checkpointer = await ShallowRedisSaver.fromUrl(
             'redis://localhost:6379',
             {
                 defaultTTL: 60 * 24 * 2, // 2 days
@@ -74,7 +74,10 @@ async function main() {
                 messages: [new HumanMessage(question)],
             },
             {
-                configurable: { thread_id: 'demo-thread-1' },
+                configurable: {
+                    thread_id: 'demo-thread-1',
+                    checkpoint_ns: 'telegram-chats',
+                },
             }
         );
 
