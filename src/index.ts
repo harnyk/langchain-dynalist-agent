@@ -7,13 +7,15 @@ import { ChatOpenAI } from '@langchain/openai';
 import { fail } from 'node:assert';
 import { z } from 'zod';
 
+import { RedisSaver } from '@langchain/langgraph-checkpoint-redis';
+import { createClient } from 'redis';
+
 config();
 
 const calculatorTool = tool(
     async (input: unknown) => {
         const { expression } = input as { expression: string };
         try {
-            // Simple evaluation - only allow basic math operations
             const sanitized = expression.replace(/[^0-9+\-*/().\s]/g, '');
             const result = eval(sanitized);
             return `The result of ${expression} is ${result}`;
@@ -44,8 +46,19 @@ async function main() {
     const model = process.env.OPENAI_MODEL || fail('OPENAI_MODEL is required');
     const apiKey =
         process.env.OPENAI_API_KEY || fail('OPENAI_API_KEY is required');
-
+    const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
+    const redis = createClient({ url: redisUrl });
     try {
+        await redis.connect();
+
+        const checkpointer = await RedisSaver.fromUrl(
+            'redis://localhost:6379',
+            {
+                defaultTTL: 60 * 24 * 2, // 2 days
+                refreshOnRead: true,
+            }
+        );
+
         const agent = createReactAgent({
             llm: new ChatOpenAI({
                 modelName: model,
@@ -53,11 +66,17 @@ async function main() {
             }),
             tools: [calculatorTool],
             prompt: SYSTEM_PROMPT,
+            checkpointer,
         });
 
-        const result = await agent.invoke({
-            messages: [new HumanMessage(question)],
-        });
+        const result = await agent.invoke(
+            {
+                messages: [new HumanMessage(question)],
+            },
+            {
+                configurable: { thread_id: 'demo-thread-1' },
+            }
+        );
 
         const lastMessage = result.messages[result.messages.length - 1];
         if (lastMessage) {
@@ -68,6 +87,9 @@ async function main() {
     } catch (error) {
         console.error('Error:', error);
         process.exit(1);
+    } finally {
+        await redis.disconnect();
+        process.exit(0);
     }
 }
 
