@@ -10,16 +10,19 @@ importers:
     dependencies:
       '@langchain/core':
         specifier: ^0.3.75
-        version: 0.3.75(openai@5.12.2(zod@3.25.76))
+        version: 0.3.75(openai@5.12.2(zod@4.1.8))
       '@langchain/langgraph':
         specifier: ^0.4.9
-        version: 0.4.9(@langchain/core@0.3.75(openai@5.12.2(zod@3.25.76)))(zod-to-json-schema@3.24.6(zod@3.25.76))
+        version: 0.4.9(@langchain/core@0.3.75(openai@5.12.2(zod@4.1.8)))(zod-to-json-schema@3.24.6(zod@4.1.8))
       '@langchain/openai':
         specifier: ^0.6.11
-        version: 0.6.11(@langchain/core@0.3.75(openai@5.12.2(zod@3.25.76)))
+        version: 0.6.11(@langchain/core@0.3.75(openai@5.12.2(zod@4.1.8)))
       dotenv:
         specifier: ^17.2.2
         version: 17.2.2
+      zod:
+        specifier: ^4.1.8
+        version: 4.1.8
     devDependencies:
       '@types/node':
         specifier: ^24.3.1
@@ -514,6 +517,9 @@ packages:
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
+  zod@4.1.8:
+    resolution: {integrity: sha512-5R1P+WwQqmmMIEACyzSvo4JXHY5WiAFHRMg+zBZKgKS+Q1viRa0C1hmUKtHltoIFKtIdki3pRxkmpP74jnNYHQ==}
+
 snapshots:
 
   '@cfworker/json-schema@4.1.1': {}
@@ -596,14 +602,14 @@ snapshots:
   '@esbuild/win32-x64@0.25.9':
     optional: true
 
-  '@langchain/core@0.3.75(openai@5.12.2(zod@3.25.76))':
+  '@langchain/core@0.3.75(openai@5.12.2(zod@4.1.8))':
     dependencies:
       '@cfworker/json-schema': 4.1.1
       ansi-styles: 5.2.0
       camelcase: 6.3.0
       decamelize: 1.2.0
       js-tiktoken: 1.0.21
-      langsmith: 0.3.67(openai@5.12.2(zod@3.25.76))
+      langsmith: 0.3.67(openai@5.12.2(zod@4.1.8))
       mustache: 4.2.0
       p-queue: 6.6.2
       p-retry: 4.6.2
@@ -616,36 +622,36 @@ snapshots:
       - '@opentelemetry/sdk-trace-base'
       - openai
 
-  '@langchain/langgraph-checkpoint@0.1.1(@langchain/core@0.3.75(openai@5.12.2(zod@3.25.76)))':
+  '@langchain/langgraph-checkpoint@0.1.1(@langchain/core@0.3.75(openai@5.12.2(zod@4.1.8)))':
     dependencies:
-      '@langchain/core': 0.3.75(openai@5.12.2(zod@3.25.76))
+      '@langchain/core': 0.3.75(openai@5.12.2(zod@4.1.8))
       uuid: 10.0.0
 
-  '@langchain/langgraph-sdk@0.1.2(@langchain/core@0.3.75(openai@5.12.2(zod@3.25.76)))':
+  '@langchain/langgraph-sdk@0.1.2(@langchain/core@0.3.75(openai@5.12.2(zod@4.1.8)))':
     dependencies:
       '@types/json-schema': 7.0.15
       p-queue: 6.6.2
       p-retry: 4.6.2
       uuid: 9.0.1
     optionalDependencies:
-      '@langchain/core': 0.3.75(openai@5.12.2(zod@3.25.76))
+      '@langchain/core': 0.3.75(openai@5.12.2(zod@4.1.8))
 
-  '@langchain/langgraph@0.4.9(@langchain/core@0.3.75(openai@5.12.2(zod@3.25.76)))(zod-to-json-schema@3.24.6(zod@3.25.76))':
+  '@langchain/langgraph@0.4.9(@langchain/core@0.3.75(openai@5.12.2(zod@4.1.8)))(zod-to-json-schema@3.24.6(zod@4.1.8))':
     dependencies:
-      '@langchain/core': 0.3.75(openai@5.12.2(zod@3.25.76))
-      '@langchain/langgraph-checkpoint': 0.1.1(@langchain/core@0.3.75(openai@5.12.2(zod@3.25.76)))
-      '@langchain/langgraph-sdk': 0.1.2(@langchain/core@0.3.75(openai@5.12.2(zod@3.25.76)))
+      '@langchain/core': 0.3.75(openai@5.12.2(zod@4.1.8))
+      '@langchain/langgraph-checkpoint': 0.1.1(@langchain/core@0.3.75(openai@5.12.2(zod@4.1.8)))
+      '@langchain/langgraph-sdk': 0.1.2(@langchain/core@0.3.75(openai@5.12.2(zod@4.1.8)))
       uuid: 10.0.0
       zod: 3.25.76
     optionalDependencies:
-      zod-to-json-schema: 3.24.6(zod@3.25.76)
+      zod-to-json-schema: 3.24.6(zod@4.1.8)
     transitivePeerDependencies:
       - react
       - react-dom
 
-  '@langchain/openai@0.6.11(@langchain/core@0.3.75(openai@5.12.2(zod@3.25.76)))':
+  '@langchain/openai@0.6.11(@langchain/core@0.3.75(openai@5.12.2(zod@4.1.8)))':
     dependencies:
-      '@langchain/core': 0.3.75(openai@5.12.2(zod@3.25.76))
+      '@langchain/core': 0.3.75(openai@5.12.2(zod@4.1.8))
       js-tiktoken: 1.0.21
       openai: 5.12.2(zod@3.25.76)
       zod: 3.25.76
@@ -797,7 +803,7 @@ snapshots:
     dependencies:
       base64-js: 1.5.1
 
-  langsmith@0.3.67(openai@5.12.2(zod@3.25.76)):
+  langsmith@0.3.67(openai@5.12.2(zod@4.1.8)):
     dependencies:
       '@types/uuid': 10.0.0
       chalk: 4.1.2
@@ -807,7 +813,7 @@ snapshots:
       semver: 7.7.2
       uuid: 10.0.0
     optionalDependencies:
-      openai: 5.12.2(zod@3.25.76)
+      openai: 5.12.2(zod@4.1.8)
 
   minimatch@3.1.2:
     dependencies:
@@ -835,6 +841,11 @@ snapshots:
   openai@5.12.2(zod@3.25.76):
     optionalDependencies:
       zod: 3.25.76
+
+  openai@5.12.2(zod@4.1.8):
+    optionalDependencies:
+      zod: 4.1.8
+    optional: true
 
   p-finally@1.0.0: {}
 
@@ -907,4 +918,11 @@ snapshots:
     dependencies:
       zod: 3.25.76
 
+  zod-to-json-schema@3.24.6(zod@4.1.8):
+    dependencies:
+      zod: 4.1.8
+    optional: true
+
   zod@3.25.76: {}
+
+  zod@4.1.8: {}
