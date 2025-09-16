@@ -21,6 +21,7 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
+    "@harnyk/dynalist-api": "^1.0.4",
     "@langchain/core": "^0.3.75",
     "@langchain/langgraph": "^0.4.9",
     "@langchain/langgraph-checkpoint-redis": "^0.0.1",

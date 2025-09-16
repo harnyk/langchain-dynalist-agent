@@ -1,70 +1,59 @@
 import { config } from 'dotenv';
 
 import { HumanMessage } from '@langchain/core/messages';
-import { tool } from '@langchain/core/tools';
 import { createReactAgent } from '@langchain/langgraph/prebuilt';
 import { ChatOpenAI } from '@langchain/openai';
 import { fail } from 'node:assert';
-import { z } from 'zod';
 
-import { ShallowRedisSaver } from '@langchain/langgraph-checkpoint-redis/shallow';
+import { RedisSaver } from '@langchain/langgraph-checkpoint-redis';
 import { createClient } from 'redis';
+import { DynalistClient, DynalistService } from '@harnyk/dynalist-api';
+import { createDynalistTools } from './dynalist-tools.js';
 
 config();
 
-const calculatorTool = tool(
-    async (input: unknown) => {
-        const { expression } = input as { expression: string };
-        try {
-            const sanitized = expression.replace(/[^0-9+\-*/().\s]/g, '');
-            const result = eval(sanitized);
-            return `The result of ${expression} is ${result}`;
-        } catch (error) {
-            return `Error calculating ${expression}: Invalid expression`;
-        }
-    },
-    {
-        name: 'calculator',
-        description:
-            'Perform basic mathematical calculations. Input should be a mathematical expression like "2+2" or "10*5".',
-        schema: z.object({
-            expression: z
-                .string()
-                .describe('The mathematical expression to evaluate'),
-        }),
-    }
-);
 
-const SYSTEM_PROMPT = `You are a helpful AI assistant that answers questions accurately and concisely. 
-You think through problems step by step and provide clear, well-reasoned responses.
-Always be honest about what you know and don't know.
+const SYSTEM_PROMPT = `You are a Dynalist assistant that helps users manage their lists and documents efficiently.
+You can create lists, add items hierarchically, organize content, check/uncheck items, and perform various list management operations.
 
-You have access to tools. When you need to perform calculations, use the calculator tool.`;
+You have access to comprehensive Dynalist tools to help users with:
+- Creating and managing lists
+- Adding items with hierarchy (levels, notes, colors, headings)
+- Viewing list structures and content
+- Editing, moving, and organizing items
+- Checking/unchecking and deleting items
+
+Always be helpful and efficient in managing the user's Dynalist content.`;
 
 async function main() {
     const question = process.argv[2] || fail('Please provide a question');
     const model = process.env.OPENAI_MODEL || fail('OPENAI_MODEL is required');
     const apiKey =
         process.env.OPENAI_API_KEY || fail('OPENAI_API_KEY is required');
+    const dynalistToken = process.env.DYNALIST_TOKEN || fail('DYNALIST_TOKEN is required');
     const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
     const redis = createClient({ url: redisUrl });
     try {
         await redis.connect();
 
-        const checkpointer = await ShallowRedisSaver.fromUrl(
-            'redis://localhost:6379',
+        const checkpointer = await RedisSaver.fromUrl(
+            redisUrl,
             {
                 defaultTTL: 60 * 24 * 2, // 2 days
                 refreshOnRead: true,
             }
         );
 
+        const dynalistClient = new DynalistClient({ token: dynalistToken });
+        const dynalistService = new DynalistService(dynalistClient);
+        const tools = createDynalistTools(dynalistService);
+
         const agent = createReactAgent({
             llm: new ChatOpenAI({
                 modelName: model,
                 openAIApiKey: apiKey,
             }),
-            tools: [calculatorTool],
+            tools,
             prompt: SYSTEM_PROMPT,
             checkpointer,
         });
@@ -74,10 +63,7 @@ async function main() {
                 messages: [new HumanMessage(question)],
             },
             {
-                configurable: {
-                    thread_id: 'demo-thread-1',
-                    checkpoint_ns: 'telegram-chats',
-                },
+                configurable: { thread_id: 'demo-thread-1' },
             }
         );
 
