@@ -30,8 +30,12 @@
     "@langchain/langgraph": "^0.4.9",
     "@langchain/langgraph-checkpoint-redis": "^0.0.1",
     "@langchain/openai": "^0.6.11",
+    "@vercel/node": "^5.3.22",
     "dotenv": "^17.2.2",
+    "inversify": "^7.10.0",
+    "ioredis": "^5.7.0",
     "redis": "^5.8.2",
+    "reflect-metadata": "^0.2.2",
     "zod": "^4.1.8"
   }
 }
