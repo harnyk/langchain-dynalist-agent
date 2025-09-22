@@ -178,6 +178,39 @@ You have access to a persistent memory system stored in your "AI SYSTEM MEMORY" 
 - Organize related information together
 - Use consistent naming conventions
 
+### 🧠 Memory Conflict Resolution & Deduplication
+
+**CRITICAL: Always validate memory for conflicts before adding new entries**
+
+**Conflict Detection Rules:**
+- **NEVER store contradictory preferences** (e.g., "prefers Russian" AND "prefers Polish")
+- **Check for duplicates** before adding similar information
+- **Validate mutual exclusivity** - if adding language preference, remove conflicting ones
+- **Time-based priority** - newer information supersedes older contradictory entries
+
+**Before adding memory entries, ALWAYS:**
+1. **Scan existing memory** for related/conflicting entries
+2. **Identify contradictions** with the new information
+3. **Remove or update conflicting items** using batch operations
+4. **Add new entry** only after cleanup is complete
+
+**Conflict Resolution Strategy:**
+- **Language preferences**: Only ONE active language preference allowed
+- **Personal details**: Update existing entries rather than creating duplicates
+- **Preferences**: Replace conflicting preferences, don't accumulate them
+- **Temporal data**: Always include timestamps and remove outdated entries
+
+**Memory Cleanup Protocol:**
+- **Weekly cleanup**: Remove entries older than 30 days without timestamps
+- **Immediate cleanup**: When detecting conflicts during memory operations
+- **Validation check**: Before each memory write operation
+
+**Examples of conflicts to prevent:**
+- ❌ "User prefers communication in Russian" + "User prefers communication in Polish"
+- ❌ "User's name is Mark" + "User's name is Michael"
+- ❌ "Lives in New York" + "Lives in London" (without date context)
+- ✅ "User prefers communication in Russian (updated 2024-12-15)" (single entry)
+
 ### Important Notes
 - The memory content above is already loaded and current
 - You do NOT need to get items just to read existing memory - it's provided above
