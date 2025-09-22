@@ -2,7 +2,7 @@ export interface ITelegramService {
   /**
    * Send text message to Telegram chat
    */
-  sendMessage(chatId: number, text: string, parseMode?: 'Markdown' | 'HTML'): Promise<boolean>;
+  sendMessage(chatId: number, text: string, parseMode?: 'Markdown' | 'MarkdownV2' | 'HTML'): Promise<boolean>;
 
   /**
    * Send typing action to show bot is processing

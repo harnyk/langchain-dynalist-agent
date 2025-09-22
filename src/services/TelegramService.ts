@@ -12,7 +12,7 @@ export class TelegramService implements ITelegramService {
     }
   }
 
-  async sendMessage(chatId: number, text: string, parseMode: 'Markdown' | 'HTML' = 'Markdown'): Promise<boolean> {
+  async sendMessage(chatId: number, text: string, parseMode: 'Markdown' | 'MarkdownV2' | 'HTML' = 'MarkdownV2'): Promise<boolean> {
     try {
       const response = await fetch(`https://api.telegram.org/bot${this.botToken}/sendMessage`, {
         method: 'POST',
