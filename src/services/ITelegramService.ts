@@ -1,6 +1,7 @@
 export interface ITelegramService {
   /**
    * Send text message to Telegram chat
+   * @param parseMode Optional parse mode. If not specified, sends as plain text
    */
   sendMessage(chatId: number, text: string, parseMode?: 'Markdown' | 'MarkdownV2' | 'HTML'): Promise<boolean>;
 

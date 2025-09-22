@@ -12,27 +12,42 @@ export class TelegramService implements ITelegramService {
     }
   }
 
-  async sendMessage(chatId: number, text: string, parseMode: 'Markdown' | 'MarkdownV2' | 'HTML' = 'MarkdownV2'): Promise<boolean> {
+  async sendMessage(chatId: number, text: string, parseMode?: 'Markdown' | 'MarkdownV2' | 'HTML'): Promise<boolean> {
     try {
+      // Log the message being sent
+      console.log(`[TELEGRAM] Sending message to chat ${chatId}:`, text);
+      console.log(`[TELEGRAM] Parse mode: ${parseMode || 'none (plain text)'}`);
+
+      const requestBody: any = {
+        chat_id: chatId,
+        text: text
+      };
+
+      // Only add parse_mode if explicitly specified, otherwise send as plain text
+      if (parseMode) {
+        requestBody.parse_mode = parseMode;
+      }
+
       const response = await fetch(`https://api.telegram.org/bot${this.botToken}/sendMessage`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: text,
-          parse_mode: parseMode
-        })
+        body: JSON.stringify(requestBody)
       });
 
+      const responseText = await response.text();
+
       if (!response.ok) {
-        console.error('Failed to send Telegram message:', await response.text());
+        console.error(`[TELEGRAM] Failed to send message. Status: ${response.status}`);
+        console.error(`[TELEGRAM] Response:`, responseText);
+      } else {
+        console.log(`[TELEGRAM] Message sent successfully`);
       }
 
       return response.ok;
     } catch (error) {
-      console.error('Error sending Telegram message:', error);
+      console.error('[TELEGRAM] Error sending message:', error);
       return false;
     }
   }

@@ -124,65 +124,7 @@ Even for single operations, wrap them in arrays. This prevents rate limit issues
 * Provide quick answer suggestions as Telegram-style commands **in English** (e.g., `/yes`, `/no`, `/add_more`, `/confirm_clear`, `/cancel`).
 * Never suggest `/clear` (reserved).
 * Never claim an update without a successful tool operation.
-
-## 📝 Telegram Message Formatting
-
-**CRITICAL**: All responses will be sent via Telegram using **MarkdownV2** formatting. You MUST format your messages according to MarkdownV2 syntax to avoid parsing errors.
-
-### MarkdownV2 Syntax Reference:
-
-**Basic formatting:**
-- `*bold \*text*` - Bold text (escape asterisks inside)
-- `_italic \_text_` - Italic text (escape underscores inside)
-- `__underline__` - Underlined text
-- `~strikethrough~` - Strikethrough text
-- `||spoiler||` - Spoiler text
-- `\`inline code\`` - Inline code
-- `[link text](URL)` - Links
-
-**Code blocks:**
-```
-\`\`\`
-pre-formatted code block
-\`\`\`
-```
-
-```
-\`\`\`python
-code block with language
-\`\`\`
-```
-
-**Block quotes:**
-```
->Block quotation line
->Another quotation line
-```
-
-### Critical Escaping Rules:
-
-**ALWAYS escape these characters with backslash `\` when NOT using them for formatting:**
-`_`, `*`, `[`, `]`, `(`, `)`, `~`, `` ` ``, `>`, `#`, `+`, `-`, `=`, `|`, `{`, `}`, `.`, `!`
-
-**Special escaping contexts:**
-- Inside code blocks and inline code: escape only `` ` `` and `\`
-- Inside link URLs `(...)`: escape only `)` and `\`
-- Backslash `\` itself must always be escaped as `\\`
-
-**Examples of proper escaping:**
-- ✅ `Task completed\! List updated\.`
-- ✅ `Added 3 items \(milk, bread, eggs\)`
-- ✅ `File\_name\.txt has been processed`
-- ❌ `Task completed! List updated.` (will cause parsing error)
-
-### Formatting Guidelines:
-- Use **bold** for important operations and status updates
-- Use `inline code` for IDs, technical terms, and exact values
-- Use code blocks for structured data or lists
-- Use block quotes for notes or explanations
-- Always test mentally: can Telegram parse this MarkdownV2?
-
-**Remember**: One incorrectly escaped character will break the entire message. When in doubt, escape the character.
+* All messages are sent as PLAIN TEXT - do not use any markdown formatting or special characters for styling.
 
 ---
 
